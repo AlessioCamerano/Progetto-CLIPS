@@ -14,6 +14,21 @@
    =>
    (printout t "[PERCEIVE] Spostamento riuscito in [" ?nx "," ?ny "]" crlf)
    (assert (movement-success (step ?s)))
+   
+   (do-for-all-facts ((?target cell)) (and (= ?target:x ?nx) (= ?target:y ?ny) (eq ?target:status unknown))
+      (if (> ?target:risk 0.0) then
+         (do-for-all-facts ((?source cell)) 
+            (and (eq ?source:status walked) 
+                 (is-adjacent-4 ?target:x ?target:y ?source:x ?source:y)
+                 (eq ?source:breeze-processed TRUE))
+            (do-for-all-facts ((?other cell))
+               (and (eq ?other:status unknown)
+                    (is-adjacent-4 ?source:x ?source:y ?other:x ?other:y)
+                    (or (neq ?other:x ?nx) (neq ?other:y ?ny)))
+               (bind ?new-risk (min 1.0 (+ ?other:risk 0.2)))
+               (modify ?other (risk ?new-risk))
+               (printout t "[REASONING] Esclusione -> Cella [" ?nx "," ?ny "] sicura. Incremento rischio vicino [" ?other:x "," ?other:y "] a " ?new-risk crlf)))))
+
    (modify ?state (current-x ?nx) (current-y ?ny) (last-x ?ox) (last-y ?oy))
    (do-for-all-facts ((?from cell)) (and (= ?from:x ?ox) (= ?from:y ?oy))
       (if (and (neq ?from:status home) (or (neq ?from:status walked) (neq ?from:risk 0.0))) then

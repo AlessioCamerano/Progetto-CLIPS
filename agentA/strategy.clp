@@ -154,7 +154,7 @@
       (if (= ?risk 0.0) then
          (printout t "[STRATEGY] Esploro cella ignota sicura [" ?nx "," ?ny "]" crlf)
       else
-         (printout t "[STRATEGY] ! AZIONE RISCHIOSA OTTIMIZZATA ! Tento ingresso nel minimo rischio globale " ?risk " in [" ?nx "," ?ny "]" crlf))
+         (printout t "[STRATEGY] ! AZIONE RISCHIOSA! Tento ingresso nel minimo rischio globale " ?risk " in [" ?nx "," ?ny "]" crlf))
       (assert (action (move (get-direction ?cx ?cy ?nx ?ny))))))
 
 (defrule backtrack-to-global-best
